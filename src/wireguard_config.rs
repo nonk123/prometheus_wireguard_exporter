@@ -137,9 +137,12 @@ pub(crate) fn peer_entry_hashmap_try_from(
 
     let mut v_blocks = Vec::new();
     let mut cur_block: Option<Vec<&str>> = None;
+    let mut last_comment = None;
 
     for line in txt.lines() {
-        if line.starts_with('[') {
+        if line.trim().starts_with('#') {
+            last_comment = Some(line);
+        } else if line.starts_with('[') {
             if let Some(inner_cur_block) = cur_block {
                 // close the block
                 v_blocks.push(inner_cur_block);
@@ -148,7 +151,13 @@ pub(crate) fn peer_entry_hashmap_try_from(
 
             if line == "[Peer]" || line == "[WireGuardPeer]" {
                 // start a new block
-                cur_block = Some(Vec::new());
+
+                if let Some(comment) = last_comment {
+                    cur_block = Some(vec![comment]);
+                    last_comment = None;
+                } else {
+                    cur_block = Some(Vec::new());
+                }
             }
         } else {
             // push the line if we are in a block (only if not empty)
