@@ -38,12 +38,20 @@ fn after_char_strip_comment(s: &str, c_split: char) -> &str {
 fn from_pound_line_to_key_value(line: &str) -> Option<(&str, &str)> {
     // since the pound sign is 1 byte the below slice will work
     let line = &line[1..];
+
     let equals_pos = line.find('=');
+    let colon_pos = line.find(":");
+
     if let Some(equals_pos) = equals_pos {
         // we should trim the key
         let key = &line[..equals_pos].trim();
         // we should trim the value as well? this can be debated
         let value = &line[equals_pos + 1..].trim();
+        Some((key, value))
+    } else if let Some(colon_pos) = colon_pos {
+        // TODO: deduplicate this code.
+        let key = &line[..colon_pos].trim();
+        let value = &line[colon_pos + 1..].trim();
         Some((key, value))
     } else {
         None
@@ -77,6 +85,19 @@ impl<'a> TryFrom<&[&'a str]> for PeerEntry<'a> {
                     match key {
                         "friendly_name" => friendly_description = Some((key, value).try_into()?),
                         "friendly_json" => friendly_description = Some((key, value).try_into()?),
+                        "Client" => {
+                            let value = value.to_string();
+
+                            let value = value
+                                .rfind(" (")
+                                .map(|idx| &value[..idx])
+                                .map(String::from)
+                                .unwrap_or(value);
+
+                            friendly_description = Some(FriendlyDescription::Name(
+                                value.replace('\"', "\\\"").into(),
+                            ));
+                        }
                         _ => {}
                     }
                 }

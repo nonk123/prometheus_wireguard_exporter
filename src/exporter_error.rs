@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum FriendlyDescritionParseError {
+pub enum FriendlyDescriptionParseError {
     #[error("unsupported header")]
     UnsupportedHeader(String),
 
@@ -18,7 +18,7 @@ pub enum PeerEntryParseError {
     AllowedIPsEntryNotFound { lines: Vec<String> },
 
     #[error("Friendly description parse error")]
-    FriendlyDescritionParseError(#[from] FriendlyDescritionParseError),
+    FriendlyDescritionParseError(#[from] FriendlyDescriptionParseError),
 }
 
 #[derive(Debug, Error)]

@@ -1,4 +1,4 @@
-use crate::exporter_error::FriendlyDescritionParseError;
+use crate::exporter_error::FriendlyDescriptionParseError;
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::convert::TryFrom;
@@ -10,7 +10,7 @@ pub enum FriendlyDescription<'a> {
 }
 
 impl<'a> TryFrom<(&'a str, &'a str)> for FriendlyDescription<'a> {
-    type Error = FriendlyDescritionParseError;
+    type Error = FriendlyDescriptionParseError;
 
     fn try_from((header_name, value): (&'a str, &'a str)) -> Result<Self, Self::Error> {
         Ok(match header_name {
@@ -21,7 +21,7 @@ impl<'a> TryFrom<(&'a str, &'a str)> for FriendlyDescription<'a> {
             }
 
             other => {
-                return Err(FriendlyDescritionParseError::UnsupportedHeader(format!(
+                return Err(FriendlyDescriptionParseError::UnsupportedHeader(format!(
                     "{} is not a supported tag",
                     other
                 )))
