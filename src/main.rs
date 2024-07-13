@@ -195,7 +195,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 .help("exports runtime calculated latest handshake delay")
                 .default_value("false")
         )
-         .get_matches();
+        .arg(Arg::new("instance_name").short('N').long("instance_name").help("A name for differentiating between WireGuard server instances inside Grafana."))
+        .get_matches();
 
     let options = Options::from_claps(&matches);
 

@@ -262,6 +262,10 @@ impl WireGuard {
                         attributes.push(("allowed_ips", &ep.allowed_ips));
                     }
 
+                    if let Some(ref instance_name) = options.instance_name {
+                        attributes.push(("instance_name", instance_name));
+                    }
+
                     // let's add the friendly_name attribute if present
                     // and has meaniningful value
                     if let Some(pehm) = pehm {
@@ -439,6 +443,7 @@ wg0\tsUsR6xufQQ8Tf0FuyY9tfEeYdhVMeFelr4ZMUrj+B0E=\t(none)\t10.211.123.128:51820\
             interfaces: None,
             export_remote_ip_and_port: true,
             export_latest_handshake_delay: false,
+            instance_name: None,
         };
 
         let s = a.render_with_names(Some(&pe), &options);
@@ -540,6 +545,7 @@ wireguard_latest_handshake_seconds{interface=\"wg0\",public_key=\"sUsR6xufQQ8Tf0
             interfaces: None,
             export_remote_ip_and_port: true,
             export_latest_handshake_delay: true,
+            instance_name: None,
         };
 
         let s = a.render_with_names(None, &options);
@@ -575,6 +581,7 @@ wireguard_latest_handshake_seconds{interface=\"wg0\",public_key=\"sUsR6xufQQ8Tf0
             interfaces: None,
             export_remote_ip_and_port: true,
             export_latest_handshake_delay: false,
+            instance_name: None,
         };
 
         let prometheus = wg.render_with_names(None, &options);
@@ -640,6 +647,7 @@ wireguard_latest_handshake_seconds{interface=\"wg0\",public_key=\"sUsR6xufQQ8Tf0
             interfaces: None,
             export_remote_ip_and_port: true,
             export_latest_handshake_delay: false,
+            instance_name: None,
         };
 
         let prometheus = wg.render_with_names(Some(&pehm), &options);

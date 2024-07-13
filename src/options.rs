@@ -9,6 +9,7 @@ pub(crate) struct Options {
     pub interfaces: Option<Vec<String>>,
     pub export_remote_ip_and_port: bool,
     pub export_latest_handshake_delay: bool,
+    pub instance_name: Option<String>,
 }
 
 impl Options {
@@ -29,6 +30,9 @@ impl Options {
             export_latest_handshake_delay: *matches
                 .get_one("export_latest_handshake_delay")
                 .unwrap_or(&false),
+            instance_name: matches
+                .get_one::<String>("instance_name")
+                .map(String::to_owned),
         };
 
         options
